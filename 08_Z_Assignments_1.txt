@@ -11,14 +11,26 @@ The default logging driver is set to syslog.
 
 Good luck!
 
+---------------------------------------------------------------------------------------------------------------------------------------------
 Use Docker CE version 5:18.09.5~3-0~ubuntu-bionic
 
 
 Step1: Update the apt package index:
 	sudo apt-get update
-	Hit:1 https://download.docker.com/linux/ubuntu bionic InRelease
-	Hit:2 http://ap-south-1.ec2.archive.ubuntu.com/ubuntu bionic InRelease
-	.......
+	sudo apt-get update
+Hit:1 https://download.docker.com/linux/ubuntu bionic InRelease
+Get:2 http://security.ubuntu.com/ubuntu bionic-security InRelease [88.7 kB]
+Hit:3 http://ap-south-1.ec2.archive.ubuntu.com/ubuntu bionic InRelease
+Get:4 http://ap-south-1.ec2.archive.ubuntu.com/ubuntu bionic-updates InRelease [88.7 kB]
+Get:5 http://ap-south-1.ec2.archive.ubuntu.com/ubuntu bionic-backports InRelease [74.6 kB]
+Get:6 http://ap-south-1.ec2.archive.ubuntu.com/ubuntu bionic-updates/main amd64 Packages [796 kB]
+Get:7 http://security.ubuntu.com/ubuntu bionic-security/main amd64 Packages [573 kB]
+Get:8 http://ap-south-1.ec2.archive.ubuntu.com/ubuntu bionic-updates/universe amd64 Packages [1025 kB]
+Get:9 http://ap-south-1.ec2.archive.ubuntu.com/ubuntu bionic-updates/universe Translation-en [315 kB]
+Get:10 http://security.ubuntu.com/ubuntu bionic-security/universe amd64 Packages [620 kB]
+Get:11 http://security.ubuntu.com/ubuntu bionic-security/universe Translation-en [207 kB]
+Fetched 3788 kB in 3s (1145 kB/s)
+Reading package lists... Done
 
 
 step2:
@@ -27,14 +39,22 @@ step2:
 	
 	:-sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
         
-           Reading package lists... Done
-           Building dependency tree
-           Reading state information... Done
-           ca-certificates is already the newest version (20180409).
+           sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+ca-certificates is already the newest version (20180409).
+curl is already the newest version (7.58.0-2ubuntu3.8).
+software-properties-common is already the newest version (0.96.24.32.11).
+apt-transport-https is already the newest version (1.6.12).
+0 upgraded, 0 newly installed, 0 to remove and 31 not upgraded.
+
 
 
 step3: Add Docker’s GPG Key
-  	:-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add –
+  	:-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add
+	OK
+
 
 
 Step4:Installing Docker Repository
@@ -42,23 +62,39 @@ Step4:Installing Docker Repository
 
 Hit:1 https://download.docker.com/linux/ubuntu bionic InRelease
 Hit:2 http://ap-south-1.ec2.archive.ubuntu.com/ubuntu bionic InRelease
-..................
+Hit:3 http://ap-south-1.ec2.archive.ubuntu.com/ubuntu bionic-updates InRelease
+Hit:4 http://security.ubuntu.com/ubuntu bionic-security InRelease
+Hit:5 http://ap-south-1.ec2.archive.ubuntu.com/ubuntu bionic-backports InRelease
+Reading package lists... Done
+
 
 
 Step5 install version:
 
     :-sudo apt-get install docker-ce=<VERSION>
-	Example:sudo apt-get install docker-ce=5:18.09.5~3-0~ubuntu-bionic containerd.io
+	
 
+sudo apt-get install docker-ce=5:18.09.5~3-0~ubuntu-bionic containerd.io
 Reading package lists... Done
 Building dependency tree
 Reading state information... Done
 containerd.io is already the newest version (1.2.10-3).
-docker-ce-cli is already the newest version (5:18.09.5~3-0~ubuntu-bionic).
-docker-ce is already the newest version (5:18.09.5~3-0~ubuntu-bionic).
-0 upgraded, 0 newly installed, 0 to remove and 47 not upgraded.
-
-
+The following packages will be DOWNGRADED:
+  docker-ce
+0 upgraded, 0 newly installed, 1 downgraded, 0 to remove and 30 not upgraded.
+Need to get 17.4 MB of archives.
+After this operation, 23.8 MB disk space will be freed.
+Do you want to continue? [Y/n] y
+Get:1 https://download.docker.com/linux/ubuntu bionic/stable amd64 docker-ce amd64 5:18.09.5~3-0~ubuntu-bionic [17.4 MB]
+Fetched 17.4 MB in 1s (24.3 MB/s)
+dpkg: warning: downgrading docker-ce from 5:19.03.4~3-0~ubuntu-bionic to 5:18.09.5~3-0~ubuntu-bionic
+(Reading database ... 111602 files and directories currently installed.)
+Preparing to unpack .../docker-ce_5%3a18.09.5~3-0~ubuntu-bionic_amd64.deb ...
+Unpacking docker-ce (5:18.09.5~3-0~ubuntu-bionic) over (5:19.03.4~3-0~ubuntu-bionic) ...
+Setting up docker-ce (5:18.09.5~3-0~ubuntu-bionic) ...
+update-alternatives: using /usr/bin/dockerd-ce to provide /usr/bin/dockerd (dockerd) in auto mode
+Processing triggers for systemd (237-3ubuntu10.29) ...
+Processing triggers for ureadahead (0.100.0-21) ...
 
 
 For non-root user has permission to run docker commands:
@@ -67,29 +103,45 @@ For non-root user has permission to run docker commands:
 Step1:first create user
 
 
-sudo adduser sameer
+sudo adduser sagarm
 
 
+sudo adduser sagarm
+Adding user `sagarm' ...
+Adding new group `sagarm' (1002) ...
+Adding new user `sagarm' (1002) with group `sagarm' ...
+Creating home directory `/home/sagarm' ...
+Copying files from `/etc/skel' ...
 Enter new UNIX password:
 Retype new UNIX password:
 passwd: password updated successfully
+Changing the user information for sagarm
+Enter the new value, or press ENTER for the default
+        Full Name []:
+        Room Number []:
+        Work Phone []:
+        Home Phone []:
+        Other []:
 
-sudo usermod -a -G docker sameer
+
+sudo usermod -a -G docker sagarm
+
 
 to take root user type: sudo su
 
-root@ip-192-39-8-756:/home/ubuntu# login
-ip-192-39-8-756 login: sameer
+ip-172-31-13-74 :/home/ubuntu# login
+ip-172-31-13-74  login: sagarm
 Password:
 
 
-sameer@ip-192-39-8-756~$ docker images
+ip-172-31-13-74 ~$ docker images
 
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 ubuntu              latest              16508e5c265d        14 months ago       84.1MB
 redis               latest              4e8db158f18d        15 months ago       83.4MB
-weaveworks/scope    1.9.1               4b07159e407b        15 months ago       68MB
-alpine              latest              11cd0b38bc3c        16 months ago       4.41MB
+registry                                2                   f32a97de94e1        8 months ago        25.8MB
+nginx                                   1.15.8              f09fe80eb0e7        9 months ago        109MB
+hello-world                             latest              fce289e99eb9        10 months ago       1.84kB
 
 
 
@@ -106,12 +158,12 @@ Configure the default logging driver
 	}
 
 cd /etc/docker
-root@ip-192-39-8-756:/etc/docker# ls
+root@ip-172-31-13-74:/etc/docker# ls
 key.json
 
 I dont have daemon.json file so ihave created daemon.json file and set the value for log-driver:
 
-root@ip-192-39-8-756:/etc/docker# vi daemon.json
+root@ip-172-31-13-74:/etc/docker# vi daemon.json
 
 {
   	"log-driver": "syslog"
