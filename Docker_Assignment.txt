@@ -1,11 +1,13 @@
-1.$ launch.sh
+1. 
+$ launch.sh
 Waiting for Kubernetes to start...
 Kubernetes started
 
-2. $ docker -v
+1. $ docker -v
 Docker version 18.09.7, build 2d0083d
 
-3. docker pull nginx
+2. Find a image from dockerhub of your choice(recommeded: nginx), don't use browser, pull the official image from dockerhub
+docker pull nginx
 Using default tag: latest
 latest: Pulling from library/nginx
 8d691f585fa8: Pull complete
@@ -14,7 +16,8 @@ abc291867bca: Pull complete
 Digest: sha256:922c815aa4df050d4df476e92daed4231f466acc8ee90e0e774951b0fd7195a4
 Status: Downloaded newer image for nginx:latest
 
-4. $ docker images
+3. List all the available images in your machine/vm, make sure you see recently pulled image in the list.
+$ docker images
 REPOSITORY                                            TAG                 IMAGE ID            CREATED             SIZE
 nginx                                                 latest              540a289bab6c        12 days ago         126MB
 redis                                                 latest              857c4ab5f029        3 months ago        98.2MB
@@ -50,7 +53,8 @@ prom/node-exporter                                    v0.14.0             bb4a6b
 gcr.io/google_containers/kubernetes-dashboard-amd64   v1.6.0              416701f962f2        2 years ago         109MB
 gcr.io/google_containers/kube-keepalived-vip          0.9                 959a1b4b8b0f        3 years ago         142MB
 
-5. master $ docker image ls
+4. Find out the "Full" ImageId of the image that you pulled and write it below. 
+master $ docker image ls
 REPOSITORY                                            TAG                 IMAGE ID            CREATED             SIZE
 nginx                                                 latest              540a289bab6c        12 days ago         126MB
 redis                                                 latest              857c4ab5f029        3 months ago        98.2MB
@@ -60,10 +64,11 @@ alpine                                                latest              b7b28a
 quay.io/coreos/etcd                                   latest              61ad63875109        16 months ago       39.4MB
 
 
-6. master $ docker run --name "NGinx" -d nginx
+5. Create a container of your image 
+master $ docker run --name "NGinx" -d nginx
 dbed7006a9697b2d7a6caf9ebc5ba0386ae334685722b99683330dadb56af32e
 
-
+6. List all the running containers
 docker container ls
 CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS        PORTS               NAMES
 dbed7006a969        nginx                  "nginx -g 'daemon of…"   38 seconds ago      Up 37 seconds       80/tcp              NGinx
@@ -81,6 +86,7 @@ b9d10cebfb0a        b95b1efa0436           "kube-controller-man…"   43 minutes a
 34a7326c6167        k8s.gcr.io/pause:3.1   "/pause"                 43 minutes ago      Up 43 minutes                           k8s_POD_kube-apiserver-master_kube-system_5e14fe959b3111315ac406a3905e3bec_0
 cec166398d4f        k8s.gcr.io/pause:3.1   "/pause"                 43 minutes ago      Up 43 minutes                           k8s_POD_etcd-master_kube-system_f8db3c95b0db5382a307d786ce3fd941_0
 
+7) List all the running and stopped containers
 master $ docker ps
  docker ps
 CONTAINER ID        IMAGE                  COMMAND                  CREATED              STATUS         PORTS               NAMES
@@ -99,7 +105,7 @@ b9d10cebfb0a        b95b1efa0436           "kube-controller-man…"   44 minutes a
 34a7326c6167        k8s.gcr.io/pause:3.1   "/pause"                 44 minutes ago       Up 44 minutes                           k8s_POD_kube-apiserver-master_kube-system_5e14fe959b3111315ac406a3905e3bec_0
 cec166398d4f        k8s.gcr.io/pause:3.1   "/pause"                 44 minutes ago       Up 44 minutes                           k8s_POD_etcd-master_kube-system_f8db3c95b0db5382a307d786ce3fd941_0
 
-7. running container
+running container
 master $ docker ps -a
 docker ps -a
 CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS                PORTS               NAMES
@@ -137,7 +143,7 @@ b9d10cebfb0a
 34a7326c6167
 cec166398d4f
 
-8.
+8.Find out the "Full" containerId of the container and write it below.
 $ docker inspect dbed7006a969
 [
     {
@@ -353,7 +359,7 @@ $ docker inspect dbed7006a969
     }
 ]
 
-10.
+10. Get the Apache Tomcat 7 server image from the docker hub.
 master $ docker pull tomcat
 Using default tag: latest
 latest: Pulling from library/tomcat
@@ -370,20 +376,23 @@ e056aa10ded8: Pull complete
 Digest: sha256:77e41dbdf7854f03b9a933510e8852c99d836d42ae85cba4b3bc04e8710dc0f7
 Status: Downloaded newer image for tomcat:latest
 
-11.
+11.Run the Apache Tomcat 7, I mean create a container of Apache Tomcat.
 master $ docker run -d tomcat:7.0
 25c48fc18d0e0726890a35c775151068da83801a8ed532aded93b8f9ba371f0e
 
-12.
+12. Find out what is the IP Address of the Apache Tomcat Container that it is running on
 
 "IPAddress": "172.18.0.2";
 
-13.
+13. Which Port it is using?
 docker ps
 25c48fc18d0e -> tomcat: 7.0
 8080/tcp
 
-14.
+14) Try to access the Tomcat's home page from your machine/vm.
+
+
+15.Try to access the Tomcat's home page from your machine/vm.
 curl 172.18.0.2:8080
 
 <!DOCTYPE html>
@@ -584,15 +593,17 @@ curl 172.18.0.2:8080
 
 </html>
 
-15.
+15. What is the disk size of Apache Tomcat image?
+docker images tomcat 
 disk size of Apache Tomcat image:
 85.2kB (virtual 507MB)
 
-16.
+16. Find out list of all environment variables that is configured for tomcat image, can you see JAVA_HOME and CATALINA_HOME? What did you notice about it?
+docker inspect tomcat:7.0
 JAVA_HOME=/usr/local/openjdk-8,
 CATALINA_HOME=/usr/local/tomcat.
 
-17.
+17. Find out which port is exposed for tomcat?
 Exposed ports in tomact:
 "ExposedPorts": {
                 "8080/tcp": {}
@@ -603,7 +614,7 @@ Exposed ports in tomact:
 
 
 
-19.
+19. Pull ubuntu os from dockerhub, try to pull 2 images of ubuntu, Except the latest one.
 $ docker pull ubuntu
 Using default tag: latest
 latest: Pulling from library/ubuntu
@@ -635,12 +646,12 @@ Status: Downloaded newer image for ubuntu:18.04
 docker ps -a |grep ubuntu
 fa213a1792fb        ubuntu                 "/bin/bash"              30 seconds ago      Exited (0) 29 seconds ago                       inspiring_ride
 
-20.
+20. Run the container of ubuntu in attached mode.
 Run the container of ubuntu in attached mode: 
 docker run -it ubuntu
 root@26e62bd47572:/# ctrl+p, ctrl+q;
 
-21)
+21) Run the container of another ubuntu in detached mode.
 Detach
 Run the container of another ubuntu in detached mode.
 docker run -d ubuntu
@@ -649,6 +660,7 @@ docker run -d ubuntu
 
 22)
  Check how many ubuntu containers are running and stopped
+docker ps -a -q
 CONTAINER ID        IMAGE                  COMMAND                  CREATED              STATUS 
 a081c83944e0        ubuntu                 "/bin/bash"              11 minutes ago      Exited (0) 11 minutes ago                       ubuntu
 01a9d5403007        ubuntu                 "bash"                   14 minutes ago      Exited (0) 14 minutes ago                       mycont
@@ -669,7 +681,7 @@ docker ps -a
 CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS                   PORTS               NAMES
 671b851bc63b        ubuntu                 "/bin/bash"              2 minutes ago       Exited (0) 2 minutes ago                          eager_bardeen
 
-26)
+26) Login as root user in ubuntu container
 docker run -it ubuntu
 root@786f4edfa9ba:/#
 
@@ -732,7 +744,7 @@ drwxrwxrwt   2 root root 4096 Oct 29 21:25 tmp
 drwxr-xr-x  10 root root 4096 Oct 29 21:25 usr
 drwxr-xr-x  11 root root 4096 Oct 29 21:25 var
 
-28)
+28) Install software of your choice in ubuntu container using "apt-get install"
 $ apt-get update
 Get:1 http://archive.ubuntu.com/ubuntu bionic InRelease [242 kB]
 Get:2 http://security.ubuntu.com/ubuntu bionic-security InRelease [88.7 kB]
@@ -891,7 +903,9 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 e0586214cea6        4ff5cd8c2280        "/usr/bin/top -b"   35 minutes ago      Up 31 minutes                           pedantic_black
 e8d5c90b2bea        ubuntu              "/usr/bin/top -b"   59 minutes ago      Up 42 minutes                           topdemo01
 
-38)
+38)Create an index.html file with following code in it:-
+	<h1>This is Tomcat Container</h1>
+Now, Start a tomcat container in such a way that on hitting its URL for home page it should show the above html page.
 
 
 

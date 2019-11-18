@@ -1,0 +1,201 @@
+Your supermarket company has a simple web service built on nginx that serves a static list of fresh fruit available in their stores. They want to run this service as a Docker container in their new swarm environment, but first they need you to build a Docker image for this service.
+
+On this repo (https://github.com/satyensingh/full-docker-training-16-Z-Assignment1.git), you will find the files needed to create the image. Create a Dockerfile to define the image according to the provided specifications, then test the image by running a container in detached mode and verifying that you can access the fresh fruit data from the application.
+
+The image should meet the following specifications:
+
+1. Use nginx tag 1.15.8 as the base image.
+2. Add the static fresh fruit data to the image so that it will be served by the nginx server. The data file is located on the server at static/fruit.json under the project directory. Add this file to the image at the location /usr/share/nginx/html/fruit.json.
+3. Add the nginx configuration file. This file is located on the server in the project directory and is called nginx.conf. Add this file to the image at /etc/nginx/nginx.conf.
+4. The image should expose port 80.
+5. Use the following as the default command: nginx -g daemon off;.
+6. Build the image with the tag fruit-list:1.0.0
+
+Once you have built the image you should be able to test it by running it as a container:
+
+docker run --name fruit-list -d -p 8080:80 fruit-list:1.0.0
+
+
+Verify that the container serves the required data by making a request to it on port 8080. If everything is set up correctly, you should get a JSON list of fruits.
+
+curl localhost:8080
+
+
+[NOTE: Write the series of commands to achieve above in this file below the question scenario with documentation]
+
+
+Good luck!
+
+
+docker run -d -p 443:443 --restart=always --name registry -v /root/registry/auth:/auth -e REGISTRY_HTTP_ADDR=0.0.0.0:443 -e REGISTRY_AUTH=htpasswd -e "REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm" -e REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd -v /root/registry/auth/certs:/certs -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/domain.crt -e REGISTRY_HTTP_TLS_KEY=/certs/domain.key registry:2
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ubuntu@ip-172-31-13-74:~$ vi Dockerfile
+
+
+
+ubuntu@ip-172-31-13-74:~$ cd static
+
+ubuntu@ip-172-31-13-74:~/static$ ls
+fruits.json
+
+ubuntu@ip-172-31-13-74:~/static$ vi fruits.json
+
+ubuntu@ip-172-31-13-74:~/static$ cd ..
+
+ubuntu@ip-172-31-13-74:~$ ls
+Dockerfile  daemon.json  nginx.conf  static
+
+docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                            NAMES
+fa0e12f59670        fruit-list:1.0.0    "nginx -g 'daemon of…"   4 minutes ago       Up 4 minutes        0.0.0.0:8080->80/tcp             fruit-list
+d0a25861988c        registry:2          "/entrypoint.sh /etc…"   About an hour ago   Up About an hour    0.0.0.0:443->443/tcp, 5000/tcp   registry
+
+ubuntu@ip-172-31-13-74:~$ pwd
+/home/ubuntu
+
+ubuntu@ip-172-31-13-74:~$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS                      PORTS                            NAMES
+7c76871b312b        fruit-list:1.0.0    "nginx -g 'daemon of…"   4 minutes ago       Exited (0) 12 seconds ago                                    fruit-list
+d0a25861988c        registry:2          "/entrypoint.sh /etc…"   About an hour ago   Up About an hour            0.0.0.0:443->443/tcp, 5000/tcp   registry
+2e1e142b6d96        registry:2          "htpasswd -Bbn docke…"   2 hours ago         Exited (0) 2 hours ago                                       goofy_driscoll
+810edc3fc8a8        a741d1324bfe        "/bin/sh -c 'apt-get…"   4 hours ago         Exited (100) 4 hours ago                                     suspicious_lehmann
+8e908b3ec1c6        775349758637        "bash"                   2 days ago          Exited (127) 2 days ago                                      pensive_dhawan
+2e3c1396cd8c        hello-world         "/hello"                 2 days ago          Exited (0) 2 days ago                                        eloquent_archimedes
+e0586214cea6        4ff5cd8c2280        "/usr/bin/top -b"        9 days ago          Exited (0) 9 days ago                                        pedantic_black
+e8d5c90b2bea        775349758637        "/usr/bin/top -b"        9 days ago          Exited (0) 9 days ago                                        topdemo01
+c303a1a6c102        775349758637        "/bin/bash"              9 days ago          Exited (0) 9 days ago                                        cranky_cray
+90269d425180        775349758637        "/bin/bash"              10 days ago         Exited (2) 10 days ago                                       compassionate_tharp
+139d36e239eb        775349758637        "/bin/bash"              10 days ago         Exited (0) 10 days ago                                       flamboyant_moser
+31b812282f99        775349758637        "/bin/bash"              10 days ago         Exited (127) 10 days ago                                     distracted_herschel
+cea7903b39c2        775349758637        "/usr/bin/top -b"        10 days ago         Exited (0) 9 days ago                                        topdemo1
+2d497e0f17cc        775349758637        "/usr/bin/top -b"        10 days ago         Exited (0) 9 days ago                                        topdemo
+81fcc2bbdd97        775349758637        "/bin/bash"              10 days ago         Exited (0) 10 days ago                                       nice_leavitt
+805012ba9432        775349758637        "/bin/bash"              10 days ago         Exited (0) 10 days ago                                       ecstatic_ptolemy
+05fd3ab900f9        775349758637        "/bin/bash"              10 days ago         Exited (0) 9 days ago                                        mystifying_wright
+8c264dc1502c        775349758637        "/bin/bash"              10 days ago         Exited (0) 10 days ago                                       vigilant_grothendieck
+1342b184e05e        775349758637        "/bin/bash"              10 days ago         Exited (0) 10 days ago                                       tender_clarke
+6355e63da98e        tomcat              "catalina.sh run"        10 days ago         Exited (143) 9 days ago                                      cranky_greider
+5a630f40682e        nginx               "nginx -g 'daemon of…"   10 days ago         Exited (0) 9 days ago                                        NGinx
+
+
+ docker build -t fruit-list:1.0.0 .
+Sending build context to Docker daemon  32.77kB
+Step 1/7 : FROM nginx:1.15.8
+ ---> f09fe80eb0e7
+Step 2/7 : RUN apt-get update
+ ---> Using cache
+ ---> c44a8b911ffa
+Step 3/7 : WORKDIR /usr/share/nginx/html
+ ---> Using cache
+ ---> a985ef0e5cd1
+Step 4/7 : ADD ./static/fruits.json ./
+ ---> Using cache
+ ---> 5a94c33e3255
+Step 5/7 : WORKDIR /etc/nginx
+ ---> Using cache
+ ---> 9c47a54683a9
+Step 6/7 : ADD ./nginx.conf ./
+ ---> 4d7e197cb514
+Step 7/7 : EXPOSE 80
+ ---> Running in 4964830eeb1e
+Removing intermediate container 4964830eeb1e
+ ---> 11fd4013b17b
+Successfully built 11fd4013b17b
+Successfully tagged fruit-list:1.0.0
+ubuntu@ip-172-31-13-74:~$ docker run --name fruit-list -d -p 8080:80 fruit-list:1.0.0
+f1689ca5a9d2ea399554308cd8b55d4697ad778b60935573b3e52ce8669d13aa
+
+
+ubuntu@ip-172-31-13-74:~$ curl localhost:8080
+{
+  "description": "A list of fruits.",
+  "fruits": [
+    "apple",
+    "apricot",
+    "avocado",
+    "banana",
+    "bell pepper",
+    "bilberry",
+    "blackberry",
+    "blackcurrant",
+    "blood orange",
+    "blueberry",
+    "boysenberry",
+    "breadfruit",
+    "canary melon",
+    "cantaloupe",
+    "cherimoya",
+    "cherry",
+    "chili pepper",
+    "clementine",
+    "cloudberry",
+    "coconut",
+    "cranberry",
+    "cucumber",
+    "currant",
+    "damson",
+    "date",
+    "dragonfruit",
+    "durian",
+    "eggplant",
+    "elderberry",
+    "feijoa",
+    "fig",
+    "goji berry",
+    "gooseberry",
+    "grape",
+    "grapefruit",
+    "guava",
+    "honeydew",
+    "huckleberry",
+    "jackfruit",
+    "jambul",
+    "jujube",
+    "kiwi fruit",
+    "kumquat",
+    "lemon",
+    "lime",
+    "loquat",
+    "lychee",
+    "mandarine",
+    "mango",
+    "mulberry",
+    "nectarine",
+    "nut",
+    "olive",
+    "orange",
+    "pamelo",
+    "papaya",
+    "passionfruit",
+    "peach",
+    "pear",
+    "persimmon",
+    "physalis",
+    "pineapple",
+    "plum",
+    "pomegranate",
+    "pomelo",
+    "purple mangosteen",
+    "quince",
+    "raisin",
+    "rambutan",
+    "raspberry",
+    "redcurrant",
+    "rock melon",
+    "salal berry",
+    "satsuma",
+    "star fruit",
+    "strawberry",
+    "tamarillo",
+    "tangerine",
+    "tomato",
+    "ugli fruit",
+    "watermelon"
+  ]
+}
+
+
+
+
+

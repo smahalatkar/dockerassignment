@@ -1,0 +1,62 @@
+Your company is ready to move forward with using Docker to run their applications. However, they have some complex container apps that can take advantage of the cluster management and orchestration features of Docker swarm. You have been asked to stand up a simple Docker swarm cluster to be used for some initial testing. A set of servers has already been provisioned for this purpose. The swarm cluster should meet the following criteria:
+
+One Swarm manager.
+Two worker nodes.
+All nodes should use Docker CE version 5:18.09.5~3-0~ubuntu-bionic.
+Both worker nodes should be joined to the cluster.
+Any non-root user should be able to run docker commands on all three servers.
+
+[NOTE: Write the series of commands to achieve above in this file below the question scenario with documentation]
+
+Good luck!
+
+====================================================================================================================
+
+[node1] (local) root@192.168.0.18 ~
+$ docker swarm init --advertise-addr 192.168.0.18
+Swarm initialized: current node (5o7q8c5r7p9x5iuj4cus8tg7z) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-54qwmv98htien335fap105tz68e9ehjckb8euqb0aj2no1otfi-8dg3b4cowxxicoerw8wngbpuz 192.168.0.18:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+[node1] (local) root@192.168.0.18 ~
+###############################################################
+#                          WARNING!!!!                        #
+# This is a sandbox environment. Using personal credentials   #
+# is HIGHLY! discouraged. Any consequences of doing so are    #
+# completely the user's responsibilites.                      #
+#                                                             #
+# The PWD team.                                               #
+###############################################################
+[node1] (local) root@192.168.0.18 ~
+$ docker swarm init -- advertise-addr 192.168.0.18
+"docker swarm init" accepts no arguments.
+See 'docker swarm init --help'.
+
+Usage:  docker swarm init [OPTIONS]
+
+Initialize a swarm
+[node1] (local) root@192.168.0.18 ~
+$ docker swarm init --advertise-addr 192.168.0.18
+Swarm initialized: current node (5o7q8c5r7p9x5iuj4cus8tg7z) is now a manager.
+
+[node2] (local) root@192.168.0.17 ~
+$ docker swarm join --token SWMTKN-1-54qwmv98htien335fap105tz68e9ehjckb8euqb0aj2no1otfi-8dg3b4cowxxicoerw8wngbpuz 192.168.0.18:2377
+This node joined a swarm as a worker.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-54qwmv98htien335fap105tz68e9ehjckb8euqb0aj2no1otfi-8dg3b4cowxxicoerw8wngbpuz 192.168.0.18:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+[node1] (local) root@192.168.0.18 ~
+docker node ls
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+5o7q8c5r7p9x5iuj4cus8tg7z *   node1               Ready               Active              Leader              19.03.4
+sxe5tw78ji7iep5571hqmv2jl     node2               Ready               Active                                  19.03.4
+
+
